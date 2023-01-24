@@ -101,7 +101,7 @@ public:
 		move();
 		if (-m_x *  - m_delay + m_width < 0)
 		{
-			m_speed *= 1.1f;
+			m_speed *= 1.05f;
 			m_x = (GetScreenWidth() + m_width);
 			if (m_y > GetScreenHeight() - GetScreenHeight() * 0.05)
 				m_y = m_height + GetScreenHeight() * 0.05;
@@ -116,7 +116,7 @@ public:
 		move();
 		if ( m_x  - m_width * -m_delay < 0)
 		{
-			m_speed *= 1.1f;
+			m_speed *= 1.05f;
 			m_x = (GetScreenWidth() + m_width);
 			m_y = player.getY();
 		}
@@ -156,6 +156,7 @@ bool Player::collide(Projectile projectile)
 
 int main()
 {
+	#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 	InitWindow(1000, 800, "Helicopter helicopter");
 
 	SetWindowState(FLAG_VSYNC_HINT);
