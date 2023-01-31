@@ -19,9 +19,4 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\night_city.jpg">
-      <Filter>Исходные файлы</Filter>
-    </Image>
-  </ItemGroup>
 </Project>

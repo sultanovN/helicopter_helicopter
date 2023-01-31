@@ -7,6 +7,9 @@
 
 bool game_over = false;
 
+Texture2D player_texture;
+Texture2D projectile_texture;
+
 uint8_t level = 0;
 
 class Projectile;
@@ -32,7 +35,9 @@ public:
 
 	void draw()
 	{
+		DrawTextureEx(player_texture, Vector2{ m_x, m_y }, 0.0f, 0.3f, WHITE);
 		DrawRectangleRec({ m_x, m_y, m_width, m_height }, m_color);
+		
 	}
 
 	void move()
@@ -78,7 +83,7 @@ protected:
 	float m_speed, m_delay;
 	Color m_color;
 public:
-	Projectile(float h_y = 0, float delay = 1.0f, Color color = RED, float speed = 300, float width = 80, float height = 40)
+	Projectile(float h_y = 0, float delay = 1.0f, Color color = RED, float speed = 300, float width = 100, float height = 20)
 		: m_delay{ delay }, m_x{ GetScreenWidth() + width }, m_y{ GetScreenHeight() / 2.0f - height / 2 + h_y}, m_width{ width }, m_height{ height }, m_speed{ speed }, m_color{ color }
 	{
 
@@ -99,7 +104,8 @@ public:
 
 	void draw()
 	{
-		DrawRectangleRec({ m_x, m_y, m_width, m_height }, m_color);
+		DrawTextureEx(projectile_texture, Vector2{ m_x, m_y - m_height * 2.5f }, 0.0f, 0.4f, WHITE);
+		/*DrawRectangleRec({ m_x, m_y, m_width, m_height }, m_color);*/
 	}
 
 	virtual void move() 
@@ -233,9 +239,15 @@ int main()
 
 	std::chrono::high_resolution_clock::time_point time_1 = std::chrono::high_resolution_clock::now();
 
+	Texture2D background = LoadTexture("resources/city.png");
+	player_texture = LoadTexture("resources/helicopter.png");
+	projectile_texture = LoadTexture("resources/rocket.png");
+	float scrolling_back = 0.0f;
 	while (!WindowShouldClose())
 	{
 		
+		scrolling_back -= 1.0f;
+
 		player.move();
 		for (auto &elem: array)
 			elem.move();
@@ -247,7 +259,8 @@ int main()
 
 		BeginDrawing();
 		ClearBackground(BLACK);
-		showTime(time_1);
+		DrawTextureEx(background, Vector2{ scrolling_back, GetScreenHeight() * 1.0f - background.height}, 0.0f, 1.0f, WHITE);
+		
 		player.draw();
 		for (auto elem : array)
 		{
@@ -257,9 +270,13 @@ int main()
 
 		}
 		array[0].gameEnd(player, array, time_1);
+		showTime(time_1);
+		
 
 		EndDrawing();
 	}
+
+	UnloadTexture(background);
 
 	CloseWindow();
 
