@@ -23,7 +23,7 @@ private:
 	float m_speed;
 	Color m_color;
 public:
-	Player(float x = 100, float y = GetScreenHeight() / 2.0f - 40 / 2, float width = 150, float height = 80, float speed = 300, Color color = BLUE)
+	Player(float x = 100, float y = GetScreenHeight() / 2.0f - 40 / 2, float width = 150, float height = 45, float speed = 300, Color color = BLUE)
 		: m_x{ x }, m_y{ y }, m_width{ width }, m_height{ height }, m_speed{ speed }, m_color{ color }
 	{
 
@@ -35,8 +35,8 @@ public:
 
 	void draw()
 	{
-		DrawTextureEx(player_texture, Vector2{ m_x, m_y }, 0.0f, 0.3f, WHITE);
-		DrawRectangleRec({ m_x, m_y, m_width, m_height }, m_color);
+		DrawTextureEx(player_texture, Vector2{ m_x - 100, m_y - 50 }, 0.0f, 0.3f, WHITE);
+		/*DrawRectangleRec({ m_x, m_y, m_width, m_height }, m_color);*/
 		
 	}
 
@@ -225,8 +225,8 @@ void showTime(std::chrono::high_resolution_clock::time_point& time)
 
 int main()
 {
-	
-	InitWindow(1000, 800, "Helicopter helicopter");
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	InitWindow(GetScreenWidth(), GetScreenHeight(), "Helicopter helicopter");
 
 	SetWindowState(FLAG_VSYNC_HINT);
 
@@ -239,14 +239,27 @@ int main()
 
 	std::chrono::high_resolution_clock::time_point time_1 = std::chrono::high_resolution_clock::now();
 
-	Texture2D background = LoadTexture("resources/city.png");
+	Texture2D back = LoadTexture("resources/back_1.png");
+	Texture2D mid = LoadTexture("resources/mid_1.png");
+	Texture2D front = LoadTexture("resources/front_1.png");
+
 	player_texture = LoadTexture("resources/helicopter.png");
 	projectile_texture = LoadTexture("resources/rocket.png");
+
 	float scrolling_back = 0.0f;
+	float scrolling_mid = 0.0f;
+	float scrolling_front = 0.0f;
+
+
 	while (!WindowShouldClose())
 	{
 		
-		scrolling_back -= 1.0f;
+		scrolling_back -= 0.2f;
+		scrolling_mid -= 0.5f;
+		scrolling_front -= 0.8f;
+
+		if (scrolling_back <= back.width * 2) scrolling_back = 0;
+
 
 		player.move();
 		for (auto &elem: array)
@@ -258,9 +271,13 @@ int main()
 
 
 		BeginDrawing();
-		ClearBackground(BLACK);
-		DrawTextureEx(background, Vector2{ scrolling_back, GetScreenHeight() * 1.0f - background.height}, 0.0f, 1.0f, WHITE);
+		ClearBackground({42,2, 73});
+		DrawTextureEx(back, Vector2{ scrolling_back, 20 }, 0.0f, 2.0f, WHITE);
+		DrawTextureEx(back, Vector2{ scrolling_front, 20}, 0.0f, 2.0f, WHITE);
+		DrawTextureEx(front, Vector2{ front.width * 2.0f + scrolling_front , GetScreenHeight() * 1.0f - front.height }, 0.0f, 2.0f, WHITE);
+		DrawTextureEx(mid, Vector2{ scrolling_mid, GetScreenHeight() * 1.0f - back.height - mid.height }, 0.0f, 2.0f, WHITE);
 		
+
 		player.draw();
 		for (auto elem : array)
 		{
@@ -276,7 +293,9 @@ int main()
 		EndDrawing();
 	}
 
-	UnloadTexture(background);
+	UnloadTexture(back);
+	UnloadTexture(mid);
+	UnloadTexture(front);
 
 	CloseWindow();
 
