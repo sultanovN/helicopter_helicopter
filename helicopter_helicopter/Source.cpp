@@ -199,6 +199,11 @@ void gameProgress(std::vector<Projectile> &array, std::vector<TrackingProjectile
 		++level;
 		track_array.push_back(TrackingProjectile{});
 	}
+	if (time_span.count() > 25 && level == 1)
+	{
+		++level;
+		track_array.push_back(TrackingProjectile{});
+	}
 	if (time_span.count() > 35 && level == 2)
 	{
 		++level;
@@ -258,8 +263,9 @@ int main()
 		scrolling_mid -= 0.5f;
 		scrolling_front -= 0.8f;
 
-		if (scrolling_back <= back.width * 2) scrolling_back = 0;
-
+		if (scrolling_back <= -back.width) scrolling_back = GetScreenWidth();
+		if (scrolling_mid <= -mid.width) scrolling_mid = GetScreenWidth();
+		if (scrolling_front <= -front.width) scrolling_front = GetScreenWidth();
 
 		player.move();
 		for (auto &elem: array)
@@ -272,10 +278,12 @@ int main()
 
 		BeginDrawing();
 		ClearBackground({42,2, 73});
-		DrawTextureEx(back, Vector2{ scrolling_back, 20 }, 0.0f, 2.0f, WHITE);
-		DrawTextureEx(back, Vector2{ scrolling_front, 20}, 0.0f, 2.0f, WHITE);
-		DrawTextureEx(front, Vector2{ front.width * 2.0f + scrolling_front , GetScreenHeight() * 1.0f - front.height }, 0.0f, 2.0f, WHITE);
-		DrawTextureEx(mid, Vector2{ scrolling_mid, GetScreenHeight() * 1.0f - back.height - mid.height }, 0.0f, 2.0f, WHITE);
+		DrawTextureEx(back, Vector2{ GetScreenWidth() * 1.0f - back.width + scrolling_back, 60 }, 0.0f, 2.0f, WHITE);
+		DrawTextureEx(back, Vector2{ scrolling_back, 60}, 0.0f, 2.0f, WHITE);
+		DrawTextureEx(mid, Vector2{ GetScreenWidth() * 1.0f - mid.width + scrolling_mid, GetScreenHeight() * 1.0f - mid.height*1.5f - back.height }, 0.0f, 2.2f, PURPLE);
+		DrawTextureEx(mid, Vector2{ scrolling_mid, GetScreenHeight() * 1.0f - mid.height * 1.5f - back.height }, 0.0f, 2.2f, PURPLE);
+		DrawTextureEx(front, Vector2{ scrolling_front , GetScreenHeight() * 1.0f - front.height - mid.height}, 0.0f, 2.2f, PURPLE);
+		DrawTextureEx(front, Vector2{ GetScreenWidth() * 1.0f - front.width + scrolling_front , GetScreenHeight() * 1.0f - front.height - mid.height }, 0.0f, 2.2f, PURPLE);
 		
 
 		player.draw();

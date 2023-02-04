@@ -7,8 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "helicopter_helicopter", "he
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{B5BB23DD-3CAE-4FF6-BDEB-0B57C1DD94A4}"
 	ProjectSection(SolutionItems) = preProject
-		helicopter_helicopter\resources\city.png = helicopter_helicopter\resources\city.png
+		helicopter_helicopter\resources\back_1.png = helicopter_helicopter\resources\back_1.png
+		helicopter_helicopter\resources\front_1.png = helicopter_helicopter\resources\front_1.png
 		helicopter_helicopter\resources\helicopter.png = helicopter_helicopter\resources\helicopter.png
+		helicopter_helicopter\resources\mid_1.png = helicopter_helicopter\resources\mid_1.png
 		helicopter_helicopter\resources\rocket.png = helicopter_helicopter\resources\rocket.png
 	EndProjectSection
 EndProject
